@@ -1,0 +1,43 @@
+name: PR
+
+on:
+  # pull_request:
+  #   branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build_only:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Check launcher syntax
+        run: sh -n startapp.sh
+      - name: Build Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          load: true
+          push: false
+          tags: praat-headless:test
+      - name: Check Praat version
+        run: docker run --rm --entrypoint /usr/local/bin/praat praat-headless:test --version
+      - name: Check desktop startup
+        shell: bash
+        run: |
+          set -euo pipefail
+          trap 'docker logs praat-smoke; docker rm -f praat-smoke' EXIT
+          docker run -d --name praat-smoke -p 127.0.0.1:5800:5800 praat-headless:test
+          ready=false
+          for attempt in {1..60}; do
+            if curl --fail --silent http://127.0.0.1:5800/ >/dev/null; then
+              ready=true
+              break
+            fi
+            sleep 1
+          done
+          test "$ready" = true
+          docker top praat-smoke -eo pid,comm | grep -Eq '[[:space:]]praat$'
