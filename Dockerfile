@@ -1,4 +1,11 @@
-FROM jlesage/baseimage-gui:ubuntu-24.04-v4
+FROM jlesage/baseimage-gui:ubuntu-26.04-v4.14
+
+# Prevent deletion of Galaxy-managed temporary files.
+RUN rm -f /etc/cont-init.d/08-clear-tmp-dir.sh
+
+# Prepare configuration directories for Galaxy's non-root user.
+RUN mkdir -p /config/var/tmp /config/log && \
+    chown -R 1000:1000 /config
 
 ARG PRAAT_VERSION=7.0.02
 ARG PRAAT_VERSION_COMPACT=7002

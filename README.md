@@ -25,11 +25,12 @@ The amd64 binary requires an x86-64-v3 CPU.
 mkdir -p config/inputs config/outputs
 # Optional: copy audio files and TextGrids into config/inputs before starting.
 docker run --rm \
+  -e WEB_AUDIO=1 \
   -e USER_ID="$(id -u)" \
   -e GROUP_ID="$(id -g)" \
   -p 127.0.0.1:5800:5800 \
   -v "$PWD/config:/config" \
-  praat-headless:7.0.02
+  praat-headless:7.0.02-26.04
 ```
 
 Open http://localhost:5800
