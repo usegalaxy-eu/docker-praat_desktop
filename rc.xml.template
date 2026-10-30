@@ -1,3 +1,9 @@
+<!--
+Adapted from jlesage/docker-baseimage-gui.
+Copyright (c) 2024 Jocelyn Le Sage.
+Licensed under the MIT License.
+https://github.com/jlesage/docker-baseimage-gui
+-->
 <?xml version="1.0" encoding="UTF-8"?>
 
 <openbox_config xmlns="http://openbox.org/3.4/rc"

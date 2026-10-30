@@ -50,7 +50,7 @@ The precise font versions depend on the Ubuntu packages installed during the ima
 
 ## Ubuntu packages and other dependencies
 
-The image also includes Ubuntu 26.04 system packages, libraries, fonts, and components inherited from the base image. The Dockerfile explicitly requests packages such as `ca-certificates`, `curl`, `dbus-x11`, GTK, ALSA, PulseAudio, and JACK libraries. These packages are **not uniformly MIT-licensed**; their individual license conditions apply.
+The image also includes Ubuntu 26.04 system packages, libraries, fonts, and components inherited from the base image. The Dockerfile explicitly requests packages such as `ca-certificates`, `dbus-x11`, GTK, ALSA, PulseAudio, and JACK libraries. These packages are **not uniformly MIT-licensed**; their individual license conditions apply.
 
 On Ubuntu/Debian-based images, package copyright and licensing details are commonly available in `/usr/share/doc/<package>/copyright`. The complete set of installed packages can be inspected using `dpkg-query -W` within the built image.
 
