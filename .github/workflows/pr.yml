@@ -32,15 +32,22 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          trap 'docker logs praat-smoke; docker rm -f praat-smoke' EXIT
-          docker run -d --name praat-smoke -p 127.0.0.1:5800:5800 praat-headless:test
-          ready=false
+
+          docker run -d --name praat-smoke \
+            -p 127.0.0.1:5800:5800 \
+            praat-headless:test
+
+          trap 'docker logs praat-smoke || true; docker rm -f praat-smoke >/dev/null || true' EXIT
+
           for attempt in {1..60}; do
-            if curl --fail --silent http://127.0.0.1:5800/ >/dev/null; then
-              ready=true
-              break
+            if curl -fsS http://127.0.0.1:5800/ >/dev/null 2>&1 &&
+              docker top praat-smoke -eo pid,comm | grep -Eq '[[:space:]]praat$'; then
+              echo "Praat desktop and web interface are ready."
+              exit 0
             fi
+
             sleep 1
           done
-          test "$ready" = true
-          docker top praat-smoke -eo pid,comm | grep -Eq '[[:space:]]praat$'
+
+          echo "ERROR: Praat desktop did not become ready within 60 seconds." >&2
+          exit 1
