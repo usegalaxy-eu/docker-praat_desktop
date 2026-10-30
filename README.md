@@ -8,7 +8,7 @@ https://www.fon.hum.uva.nl/praat/
 ```bash
 docker build -t praat-headless:7.0.02 .
 ```
-The default base is [`jlesage/baseimage-gui:ubuntu-26.04-v4.14`](https://hub.docker.com/layers/jlesage/baseimage-gui/ubuntu-26.04-v4.14/images/sha256-3a1c3e47aea7e61acb25cf29b74b1c37d5dbdf34b7828f12e2d01b14e2044680)
+The default base is [`jlesage/baseimage-gui:ubuntu-26.04-v4.14`](https://hub.docker.com/layers/jlesage/baseimage-gui/ubuntu-26.04-v4.14)
 The base manages the virtual display, Openbox, web interface, process lifecycle,
 and audio services.
 
