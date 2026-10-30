@@ -47,3 +47,12 @@ tab does not end the application.
 In the browser, enable/unmute audio if prompted. In Praat, choose PulseAudio
 under Sound playing preferences if necessary. Browser microphone recording is not
 configured. Playback has not yet been verified with this image.
+
+## Galaxy integration
+
+Galaxy can run arbitrary Virtual Research Environments (VREs). In Galaxy terms, 
+such VRE's are called "Interactive Tools", as they are using the same subsystem then 
+normal Galaxy tools. The only requirement is that those tools needs to run in containers 
+and expose a port(s) to which Galaxy can redirect users. The Docker image for Praat you 
+can find in this repository. The Galaxy tool defintion for the Praat Interactive are still
+under development ([PR](https://github.com/usegalaxy-eu/galaxy/pull/419))
