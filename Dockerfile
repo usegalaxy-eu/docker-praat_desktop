@@ -3,7 +3,7 @@ FROM jlesage/baseimage-gui:ubuntu-26.04-v4.14@sha256:ba4b93918b17f74c21ab2a0ae7c
 # Prevent deletion of Galaxy-managed temporary files.
 RUN rm -f /etc/cont-init.d/08-clear-tmp-dir.sh
 
-SHELL ["/bin/bash", "-c"]
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # The base image's helper initializes user/group files needed by package scripts
 # (including fontconfig's root:staff ownership), then cleans up after apt.
