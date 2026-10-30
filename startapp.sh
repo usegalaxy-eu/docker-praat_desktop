@@ -1,7 +1,9 @@
 #!/bin/sh
 set -eu
 
-# Galaxy sets HOME to its mounted job directory. Standalone runs use /config.
+# baseimage-gui sets HOME=/config during initialization.
+# The Galaxy Interactive Tool wrapper must place inputs in
+# /config/inputs and collect outputs from /config/outputs.
 mkdir -p "$HOME/inputs" "$HOME/outputs"
 cd "$HOME/outputs"
 

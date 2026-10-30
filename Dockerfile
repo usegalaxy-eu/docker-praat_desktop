@@ -8,15 +8,21 @@ SHELL ["/bin/bash", "-c"]
 # The base image's helper initializes user/group files needed by package scripts
 # (including fontconfig's root:staff ownership), then cleans up after apt.
 RUN add-pkg \
-        ca-certificates curl dbus-x11 \
+        ca-certificates dbus-x11 \
         fonts-sil-charis fonts-sil-doulos \
         libgtk-3-0t64 libasound2t64 libpulse0 libjack-jackd2-0
 
 ARG PRAAT_VERSION=7.0.02
 
-LABEL org.opencontainers.image.authors="Ivo Christopher Leist <ivo.leist@gmail.com>" 
+LABEL org.opencontainers.image.title="Praat desktop" \
+      org.opencontainers.image.description="Praat ${PRAAT_VERSION} in a browser-accessible desktop (noVNC) for Galaxy Interactive Tools" \
+      org.opencontainers.image.source="https://github.com/usegalaxy-eu/docker-praat_desktop" \
+      org.opencontainers.image.version="${PRAAT_VERSION}" \
+      org.opencontainers.image.licenses="MIT AND GPL-3.0-or-later" \
+      org.opencontainers.image.authors="Ivo Christopher Leist <ivo.leist@gmail.com>"
 
 RUN set -eux; \
+    add-pkg --virtual praat-build-deps curl; \
     PRAAT_VERSION_COMPACT="${PRAAT_VERSION//./}"; \
     curl -fsSL --retry 3 \
         "https://github.com/praat/praat/releases/download/v${PRAAT_VERSION}/praat${PRAAT_VERSION_COMPACT}_linux-x64v3.tar.gz" \
@@ -24,11 +30,10 @@ RUN set -eux; \
     tar -xzf /tmp/praat.tar.gz -C /usr/local/bin; \
     chmod 755 /usr/local/bin/praat; \
     rm /tmp/praat.tar.gz; \
-    praat --version
-
-# Use Praat's upstream application icon.
-RUN install_app_icon.sh \
-    "https://raw.githubusercontent.com/praat/praat.github.io/v${PRAAT_VERSION}/main/praat-128.png"
+    praat --version; \
+    install_app_icon.sh \
+        "https://raw.githubusercontent.com/praat/praat.github.io/v${PRAAT_VERSION}/main/praat-128.png"; \
+    del-pkg praat-build-deps
 
 COPY --chmod=755 startapp.sh /startapp.sh
 
