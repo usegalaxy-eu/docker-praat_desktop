@@ -1,21 +1,28 @@
 #!/bin/sh
 set -eu
 
-# baseimage-gui sets HOME=/config during initialization.
-# The Galaxy Interactive Tool wrapper must place inputs in
-# /config/inputs and collect outputs from /config/outputs.
-mkdir -p "$HOME/inputs" "$HOME/outputs"
-cd "$HOME/outputs"
+# Use the configured workspace directory, defaulting to /config.
+PRAAT_WORKDIR="${PRAAT_WORKDIR:-$HOME}"
 
-# Use positional arguments so filenames containing spaces stay intact.
-# --new-open launches the GUI and reads data/script files into that instance.
-set --
-for input in "$HOME"/inputs/*; do
-    [ -f "$input" ] || continue
-    set -- "$@" "$input"
+# Create input and output directories inside the workspace.
+mkdir -p "$PRAAT_WORKDIR/inputs" "$PRAAT_WORKDIR/outputs"
+cd "$PRAAT_WORKDIR"
+
+set -- # Start with an empty argument list
+for input in "$PRAAT_WORKDIR"/inputs/*; do  # Iterate over directory entries
+    [ -f "$input" ] || continue    # Skip anything that isn't a regular file
+    set -- "$@" "$input"           # Append the filename as one argument
 done
 
+# If at least one input file was found, start Praat and open all collected files.
+# "$#" is the number of positional arguments (i.e., input files).
 if [ "$#" -gt 0 ]; then
+	# Replace the startup shell with Praat so the container's cinit supervisor
+	# can directly monitor the application process and manage its shutdown.
+	# --new-open starts a new Praat instance and opens the supplied files
+    # "$@" passes each filename as a separate argument, preserving spaces
     exec /usr/local/bin/praat --new-open "$@"
 fi
+
+# Start Praat normally when no input files are supplied.
 exec /usr/local/bin/praat

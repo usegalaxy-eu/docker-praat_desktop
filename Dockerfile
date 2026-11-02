@@ -40,6 +40,7 @@ RUN set -eux; \
 COPY --chmod=755 startapp.sh /startapp.sh
 
 ENV APP_NAME="Praat" \
+    PRAAT_WORKDIR="/config" \
     WEB_AUDIO=1
 
 # Enable audio by default in the web-based VNC client.
@@ -48,5 +49,3 @@ RUN sed -i \
     /opt/noVNC/app/ui.js
 
 COPY rc.xml.template /opt/base/etc/openbox/rc.xml.template
-
-WORKDIR /config

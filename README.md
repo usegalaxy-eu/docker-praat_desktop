@@ -22,14 +22,20 @@ The amd64 binary requires an x86-64-v3 CPU.
 ## Run outside Galaxy
 
 ```bash
-mkdir -p config/inputs config/outputs
-# Optional: copy audio files and TextGrids into config/inputs before starting.
+# Create directories for persistent configuration and Praat files.
+mkdir -p \
+    "$PWD/config" \
+    "$PWD/praat-workspace/inputs" \
+    "$PWD/praat-workspace/outputs"
+
+# Optional: copy audio files and TextGrids into praat-workspace/inputs before starting.
 docker run --rm \
   -e WEB_AUDIO=1 \
   -e USER_ID="$(id -u)" \
   -e GROUP_ID="$(id -g)" \
   -p 127.0.0.1:5800:5800 \
   -v "$PWD/config:/config" \
+  -v "$PWD/praat-workspace:/workspace" \
   praat-headless:7.0.02
 ```
 
