@@ -8,6 +8,10 @@ PRAAT_WORKDIR="${PRAAT_WORKDIR:-$HOME}"
 mkdir -p "$PRAAT_WORKDIR/inputs" "$PRAAT_WORKDIR/outputs"
 cd "$PRAAT_WORKDIR"
 
+# Use the workspace as Praat's home directory.
+# The base image has already initialized its configuration under /config.
+export HOME="$PRAAT_WORKDIR"
+
 set -- # Start with an empty argument list
 for input in "$PRAAT_WORKDIR"/inputs/*; do  # Iterate over directory entries
     [ -f "$input" ] || continue    # Skip anything that isn't a regular file
